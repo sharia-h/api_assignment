@@ -1,5 +1,5 @@
+from datetime import datetime
 from application import db
- 
 class Country(db.Model):
     __tablename__ = 'countries'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,28 +13,19 @@ class Country(db.Model):
     map_url = db.Column(db.String(100), nullable=False)
     population = db.Column(db.BigInteger, nullable=False)
     flag_url = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
-    updated_at = db.Column(db.DateTime, nullable=False)
- 
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    neighbours=db.relationship('CountryNeighbour', backref=('CountryModel'), lazy=True) 
     def __repr__(self):
-        return f"Country('{self.name}', '{self.code}')"
- 
- 
+        return f"Country('{self.id}')"
 class CountryNeighbour(db.Model):
     __tablename__ = 'country_neighbours'
     id = db.Column(db.Integer, primary_key=True)
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
-    neighbour_country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
-    updated_at = db.Column(db.DateTime, nullable=False)
- 
-    def __repr__(self):
+    neighbour_country_id = db.Column(db.String,  nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+def __repr__(self):
         return f"CountryNeighbour('{self.country_id}', '{self.neighbour_country_id}')"
-   
-class TestTable(db.Model):
-    __tablename__ = 'test_table'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
- 
-    def __repr__(self):
-        return f"TestTable('{self.name}')"
+
+
