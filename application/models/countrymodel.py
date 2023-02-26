@@ -4,8 +4,9 @@ class Country(db.Model):
     __tablename__ = 'countries'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    cca = db.Column(db.String(15), nullable=False)
+    cca3 = db.Column(db.String(15), nullable=False)
     currency_code = db.Column(db.String(15), nullable=False)
+    currency=db.Column(db.String(100),nullable=False)
     capital = db.Column(db.String(100), nullable=False)
     region = db.Column(db.String(100), nullable=False)
     subregion = db.Column(db.String(100), nullable=False)
