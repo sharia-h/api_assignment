@@ -57,3 +57,33 @@ def country():
         "data":list
     }
     return jsonify(response), 200
+
+
+
+
+
+@country_bp.route("/country/<int:id>", methods=["GET"])
+def country_by_id(id):
+    country=Country.query.filter_by(id=id)
+    list=[]
+    # print(country)
+    for data in country:
+        sublist={}
+        sublist["id"]= data.id
+        sublist["name"]= data.name
+        sublist["cca3"]= data.cca3
+        sublist["currency_code"]= data.currency_code
+        sublist["currency"]= data.currency
+        sublist["capital"]= data.capital
+        sublist["region"]= data.region
+        sublist["subregion"]= data.subregion
+        sublist["area"]= data.area
+        sublist["map_url"]= data.map_url
+        sublist["population"]= data.population
+        sublist["flag_url"]= data.flag_url
+        list.append(sublist)
+    response={
+        "message":"Country list",
+        "data":list
+    }
+    return jsonify(response), 200
