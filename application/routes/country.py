@@ -34,7 +34,21 @@ def insert():
     
 @country_bp.route("/country", methods=["GET"])
 def country():
-    country=Country.query.all()
+    sort_by=request.args.get("sort_by") if "sort_by" in request.args else ""
+    if sort_by=="a_to_z":
+        country=Country.query.order_by(Country.name.asc())
+    elif sort_by=="z_to_a":
+        country=Country.query.order_by(Country.name.desc())
+    elif sort_by=="population_high_to_low":
+        country=Country.query.order_by(Country.population.desc())
+    elif sort_by=="population_low_to_high:":
+        country=Country.query.order_by(Country.population.asc())
+    elif sort_by=="area_high_to_low":
+        country=Country.query.order_by(Country.area.desc())
+    elif sort_by=="area_low_to_high":
+        country=Country.query.order_by(Country.area.asc())
+    else:
+        country=Country.query.all()
     list=[]
     # print(country)
     for data in country:
