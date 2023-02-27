@@ -35,6 +35,9 @@ def insert():
 @country_bp.route("/country", methods=["GET"])
 def country():
     sort_by=request.args.get("sort_by") if "sort_by" in request.args else ""
+    page = request.args.get('page') if 'page' in request.args else -1
+    per_page = request.args.get('limit') if 'limit' in request.args else -1
+
     if sort_by=="a_to_z":
         country=Country.query.order_by(Country.name.asc())
     elif sort_by=="z_to_a":
@@ -48,10 +51,15 @@ def country():
     elif sort_by=="area_low_to_high":
         country=Country.query.order_by(Country.area.asc())
     else:
-        country=Country.query.all()
+        country=Country.query.order_by(Country.id.asc())
+    if int(page)>0 and int(per_page)>0:
+        pagination = country.paginate(page=int(page), per_page=int(per_page), error_out=True)
+    
+    has_next = pagination.has_next if int(page)>0 and int(per_page)>0 else False
+    has_prev = pagination.has_prev if int(page)>0 and int(per_page)>0 else False
     list=[]
     # print(country)
-    for data in country:
+    for data in pagination:
         sublist={}
         sublist["id"]= data.id
         sublist["name"]= data.name
@@ -67,8 +75,11 @@ def country():
         sublist["flag_url"]= data.flag_url
         list.append(sublist)
     response={
-        "message":"Country list",
-        "data":list
+        'message': 'Country list',
+        'data': list,
+        'has_next': has_next,
+        'has_prev': has_prev,
+
     }
     return jsonify(response), 200
 
@@ -98,6 +109,36 @@ def country_by_id(id):
         list.append(sublist)
     response={
         "message":"Country list",
+        "data":list
+    }
+    return jsonify(response), 200
+
+
+
+
+
+@country_bp.route("/country/<int:id>/neighbour", methods=["GET"])
+def country_neighbour_by_id(id):
+    country_neighbour=CountryNeighbour.query.filter_by(country_id=id)
+    list=[]
+    # print(country)
+    for data in country_neighbour:
+        sublist={}
+        sublist["id"]= data.id
+        sublist["name"]= data.name
+        sublist["cca3"]= data.cca3
+        sublist["currency_code"]= data.currency_code
+        sublist["currency"]= data.currency
+        sublist["capital"]= data.capital
+        sublist["region"]= data.region
+        sublist["subregion"]= data.subregion
+        sublist["area"]= data.area
+        sublist["map_url"]= data.map_url
+        sublist["population"]= data.population
+        sublist["flag_url"]= data.flag_url
+        list.append(sublist)
+    response={
+        "message":"Country Neighbour list",
         "data":list
     }
     return jsonify(response), 200
