@@ -1,4 +1,5 @@
 from flask import Flask
+import os
 from application.configs.config import Config
 from flask_sqlalchemy import SQLAlchemy
 db=SQLAlchemy()
