@@ -3,6 +3,10 @@ from application.models.countrymodel import Country, CountryNeighbour
 from flask import Blueprint, Response, request, jsonify
 country_bp = Blueprint("country_bp", __name__)
 
+@country_bp.route("/", methods=["GET"])
+def test():
+    return("<h1>Hello World</h1>")
+
 @country_bp.route("/insert", methods=["POST"])
 def insert():
     data = request.get_json()
