@@ -53,13 +53,13 @@ def country():
     else:
         country=Country.query.order_by(Country.id.asc())
     if int(page)>0 and int(per_page)>0:
-        pagination = country.paginate(page=int(page), per_page=int(per_page), error_out=True)
+       country = country.paginate(page=int(page), per_page=int(per_page), error_out=True)
     
-    has_next = pagination.has_next if int(page)>0 and int(per_page)>0 else False
-    has_prev = pagination.has_prev if int(page)>0 and int(per_page)>0 else False
+    has_next =country.has_next if int(page)>0 and int(per_page)>0 else False
+    has_prev =country.has_prev if int(page)>0 and int(per_page)>0 else False
     list=[]
     # print(country)
-    for data in pagination:
+    for data in country:
         sublist={}
         sublist["id"]= data.id
         sublist["name"]= data.name
